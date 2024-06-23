@@ -1,18 +1,16 @@
 #include "./include/interpreter.h"
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 int main(void) {
-  Interpreter interpreter = {
-      .regs = calloc(32, sizeof(uint64_t)),
-      .fregs = calloc(32, sizeof(double)),
-      .stack = calloc(32, 32 * 1024),
-      .pc = 0,
-  };
+  Emulator *emu = init_emulator();
+    // Load the program into memory
+  ((u32_t*)emu->mem)[0] = 0b00000000000100000000000010010011; // addi x1, x0, 1
 
-  write_reg(&interpreter, 0, 1);
-  printf("%lu\n", read_reg(&interpreter, 0));
+  // Execute the program
+  // TODO
 
-  clean_interpreter(&interpreter);
+  printf("x1 = %lu\n", read_reg(emu, 1));
+
+  clean_emulator(emu);
 }

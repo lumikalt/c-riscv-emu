@@ -1,0 +1,24 @@
+# TODO
+
+- [ ] Transparent registers
+- [ ] Forwarding
+- [ ] Hazard correction
+- [ ] Branch prediction
+- [ ] Caches
+- [ ] Virtual memory
+- [ ] Interrupts
+- [ ] Exceptions
+- [ ] Syscalls
+- [ ] MMIO
+- [ ] Debugging
+- [ ] Profiling
+- [ ] Performance counters
+- [ ] Performance optimizations
+- [ ] Assembler
+- [ ] Disassembler
+- [ ] Linker
+- [ ] Loader
+- [ ] ELF
+- [ ] Stabs
+- [ ] Breakpoints
+- [ ] Watchpoints

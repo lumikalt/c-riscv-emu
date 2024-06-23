@@ -1,34 +1,51 @@
 #pragma once
 
+#include "./util.h"
 #include <stddef.h>
 #include <stdint.h>
 
+/// # Single-Stage Pipeline RISC-V CPU
+///
+/// (TODO pipelining/forwarding/hazard correction)
+///
 /// - 32 64b integer registers
 /// - 32 64b floating-point registers
-/// - stack of TODO bytes
+/// - memory of `16MB`:
+///   - 0x000 - 0x1FF = Instructions
+///   - 0x200 - 0x2FF = Globals
+///   - 0xFF0 - (...) = Stack
 /// - program counter
+/// - instruction in each stage
+
 typedef struct {
-  uint64_t *regs;
-  double *fregs;
-  uint64_t *stack;
+  u64_t *regs;
+  f64_t *fregs;
+  u8_t *mem;
   size_t pc;
-} Interpreter;
+} Emulator;
+
+typedef enum { IF, ID, EX, MEM, WB } Stage;
 
 /// Write `val` to the integer register `reg`, and returns the old value of
 /// `reg`.
 ///
 /// Note: Attempting to write to x0 is a noop.
-uint64_t write_reg(Interpreter *, size_t reg, uint64_t val);
+u64_t write_reg(Emulator *, size_t reg, u64_t val);
 
 /// Write `val` to the fp register `reg`, and returns the old value of
 /// `reg`.
-double write_freg(Interpreter *, size_t reg, double val);
+f64_t write_freg(Emulator *, size_t reg, f64_t val);
 
 /// Get the value of the integer register `reg`.
-uint64_t read_reg(Interpreter *, size_t reg);
+u64_t read_reg(Emulator *, size_t reg);
 
 /// Get the value of the fp register `reg`.
-double read_freg(Interpreter *, size_t reg);
+f64_t read_freg(Emulator *, size_t reg);
 
-/// Free the members of the struct.
-void clean_interpreter(Interpreter *);
+/// Init a new Emulator
+Emulator *init_emulator();
+
+/// Free the members of the Emulator.
+void clean_emulator(Emulator *);
+
+void next_cycle(Emulator *);

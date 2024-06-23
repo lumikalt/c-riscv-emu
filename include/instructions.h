@@ -30,6 +30,8 @@ typedef struct {
 } Args;
 
 /// Returns the instruction's encoded arguments.
+///
+/// Note: Caller must MSB-extend, if needed.
 Args get_args(u32_t);
 
 /// Is the instruction FP?

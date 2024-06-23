@@ -1,6 +1,5 @@
 #include "../include/instructions.h"
 #include <stdbool.h>
-#include <stdint.h>
 
 typedef Emulator Emu;
 
@@ -57,23 +56,42 @@ Args get_args(u32_t instr) {
       .c = (instr >> 25) & 0b11111,
   };
 
+  bool sign = instr >> 31;
+
   switch (get_format(instr)) {
   case I_Type: {
     args.imm = instr >> 20;
+    args.imm |= sign * 0xfffffffffffff000;
   } break;
+
   case I2_Type: {
     args.imm = (instr >> 20) & 0b111111;
+    args.imm |= sign * 0xffffffffffffffc0;
   } break;
+
   case S_Type: {
     args.imm = ((instr >> 20) & 0b111111100000) | ((instr >> 7) & 0b11111);
+    args.imm |= sign * 0xfffffffffffff800;
   } break;
+
   case B_Type: {
-    args.imm = ((instr >> 31) << 12) | (((instr >> 25) & 0b111111) << 5) | ();
+    args.imm = ((instr >> 31) << 12) | (((instr >> 25) & 0b111111) << 5) |
+               (((instr >> 8) & 0b1111) << 1) | (((instr >> 7) & 0b1) << 11);
+    args.imm |= sign * 0xffffffffffffe000;
   } break;
+
   case U_Type: {
+    args.imm = instr & 0xfffff000;
+    args.imm |= sign * 0xffffffff00000000;
   } break;
+
   case J_Type: {
+    args.imm = ((instr >> 31) << 20) | (((instr >> 21) & 0b1111111111) << 1) |
+               (((instr >> 20) & 0b1) << 11) |
+               (((instr >> 12) & 0b11111111) << 12);
+    args.imm |= sign * 0xfffffffffff00000;
   } break;
+
   default:
     break;
   }

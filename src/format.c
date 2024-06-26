@@ -1,10 +1,10 @@
 #include "../include/format.h"
+#include "../include/emulator.h"
 
 typedef Emulator Emu;
 
 Format get_format(u32_t instr) {
   u8_t opcode = instr & 0b1111111;
-  u8_t funct7 = (instr >> 25) & 0b1111111;
   u8_t funct3 = (instr >> 12) & 0b111;
 
   switch (opcode) {

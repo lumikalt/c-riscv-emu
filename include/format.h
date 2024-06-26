@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./interpreter.h"
+#include "./util.h"
 
 /// Instruction Format
 typedef enum {

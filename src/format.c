@@ -1,5 +1,4 @@
-#include "../include/instructions.h"
-#include <stdbool.h>
+#include "../include/format.h"
 
 typedef Emulator Emu;
 
@@ -54,6 +53,7 @@ Args get_args(u32_t instr) {
       .a = (instr >> 15) & 0b11111,
       .b = (instr >> 20) & 0b11111,
       .c = (instr >> 25) & 0b11111,
+      .imm = 0,
   };
 
   bool sign = instr >> 31;

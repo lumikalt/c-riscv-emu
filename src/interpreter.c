@@ -1,5 +1,6 @@
 #include "../include/interpreter.h"
-#include "../include/instructions.h"
+#include "../include/format.h"
+
 #include <stdlib.h>
 
 typedef Emulator Emu;
@@ -41,6 +42,37 @@ void clean_emulator(Emu *emu) {
   free(emu->mem);
 }
 
+Fetched op_fetch(Emu *emu, Args args, Format format, bool fp) {
+  Fetched f;
+
+  if (!fp)
+    switch (format) {
+    case R4_Type:
+      __builtin_unreachable();
+    case S_Type:
+    case B_Type:
+      f.c.i = args.imm;
+    case R_Type:
+    case I_Type:
+    case I2_Type:
+      if (format == I_Type || format == I2_Type)
+        f.b.i = args.imm;
+      else
+        f.b.i = read_reg(emu, args.b);
+    default:
+      if (format == U_Type || format == J_Type)
+        f.a.i = args.imm;
+      else
+        f.a.i = read_reg(emu, args.a);
+
+      if (format != S_Type && format != B_Type)
+        f.d = args.d;
+    }
+  else {
+  }
+  return f;
+}
+
 void next_cycle(Emu *emu) {
   /* Instruction Fetch */
 
@@ -51,18 +83,9 @@ void next_cycle(Emu *emu) {
   /* Instruction Decode */
 
   // Also useful to know dependencies for the pipeline.
+  Format format = get_format(instr);
   Args args = get_args(instr);
+  bool fp = is_fp(instr);
 
-  if (!is_fp(instr)) {
-    u64_t d = read_reg(emu, args.d);
-    u64_t a = read_reg(emu, args.a);
-    u64_t b = read_reg(emu, args.b);
-    u64_t c = read_reg(emu, args.c);
-    u64_t imm = args.imm;
-  } else {
-    f64_t d = read_freg(emu, args.d);
-    f64_t a = read_freg(emu, args.a);
-    f64_t b = read_freg(emu, args.b);
-    f64_t c = read_freg(emu, args.c);
-  }
+  Fetched fetched = op_fetch(emu, args, format, fp);
 }

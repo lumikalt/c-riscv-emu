@@ -1,8 +1,6 @@
 #pragma once
 
 #include "./util.h"
-#include <stddef.h>
-#include <stdint.h>
 
 /// # Single-Stage Pipeline RISC-V CPU
 ///
@@ -16,13 +14,24 @@
 ///   - 0xFF0 - (...) = Stack
 /// - program counter
 /// - instruction in each stage
-
 typedef struct {
   u64_t *regs;
   f64_t *fregs;
   u8_t *mem;
   size_t pc;
 } Emulator;
+
+typedef union {
+  u64_t i;
+  f64_t f;
+} ForI;
+
+typedef struct {
+  size_t d; // Optional, not used for S, B
+  ForI a;
+  ForI b; // Optional, used by R, I, I2 (+bellow)
+  ForI c; // Optional, used by R4, S, B
+} Fetched;
 
 typedef enum { IF, ID, EX, MEM, WB } Stage;
 

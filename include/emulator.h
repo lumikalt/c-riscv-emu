@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./util.h"
+#include "./format.h"
 
 /// # Single-Stage Pipeline RISC-V CPU
 ///
@@ -55,5 +56,7 @@ Emulator *init_emulator();
 
 /// Free the members of the Emulator.
 void clean_emulator(Emulator *);
+
+Fetched op_fetch(Emulator *, Args, Format, bool fp);
 
 void next_cycle(Emulator *);

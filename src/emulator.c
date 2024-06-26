@@ -1,4 +1,4 @@
-#include "../include/interpreter.h"
+#include "../include/emulator.h"
 #include "../include/format.h"
 
 #include <stdlib.h>

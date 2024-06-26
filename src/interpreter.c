@@ -64,12 +64,29 @@ Fetched op_fetch(Emu *emu, Args args, Format format, bool fp) {
         f.a.i = args.imm;
       else
         f.a.i = read_reg(emu, args.a);
-
-      if (format != S_Type && format != B_Type)
-        f.d = args.d;
     }
-  else {
-  }
+  else
+    switch (format) {
+    case B_Type:
+    case I2_Type:
+    case U_Type:
+    case J_Type:
+      __builtin_unreachable();
+    case R4_Type:
+    case S_Type:
+      if (format == R4_Type)
+        f.c.f = read_freg(emu, args.c);
+      else
+        f.c.f = args.imm;
+    default:
+      if (format == I_Type)
+        f.b.f = args.imm;
+      else
+        f.b.f = read_freg(emu, args.b);
+
+      f.a.f = read_freg(emu, args.a);
+    }
+
   return f;
 }
 

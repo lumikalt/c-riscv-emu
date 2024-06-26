@@ -27,7 +27,6 @@ typedef union {
 } ForI;
 
 typedef struct {
-  size_t d; // Optional, not used for S, B
   ForI a;
   ForI b; // Optional, used by R, I, I2 (+bellow)
   ForI c; // Optional, used by R4, S, B

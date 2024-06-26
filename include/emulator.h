@@ -39,17 +39,17 @@ typedef enum { IF, ID, EX, MEM, WB } Stage;
 /// `reg`.
 ///
 /// Note: Attempting to write to x0 is a noop.
-u64_t write_reg(Emulator *, size_t reg, u64_t val);
+u64_t write_reg(Emulator *, reg rd, u64_t val);
 
 /// Write `val` to the fp register `reg`, and returns the old value of
 /// `reg`.
-f64_t write_freg(Emulator *, size_t reg, f64_t val);
+f64_t write_freg(Emulator *, reg fd, f64_t val);
 
 /// Get the value of the integer register `reg`.
-u64_t read_reg(Emulator *, size_t reg);
+u64_t read_reg(Emulator *, reg ra);
 
 /// Get the value of the fp register `reg`.
-f64_t read_freg(Emulator *, size_t reg);
+f64_t read_freg(Emulator *, reg fa);
 
 /// Init a new Emulator
 Emulator *init_emulator();

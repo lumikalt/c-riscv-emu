@@ -11,3 +11,5 @@ typedef int64_t i64_t;
 typedef uint64_t u64_t;
 typedef float f32_t;
 typedef double f64_t;
+
+typedef size_t reg;

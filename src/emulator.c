@@ -5,22 +5,22 @@
 
 typedef Emulator Emu;
 
-u64_t write_reg(Emu *emu, size_t reg, uint64_t val) {
-  uint64_t temp = emu->regs[reg];
-  if (reg != 0)
-    emu->regs[reg] = val;
+u64_t write_reg(Emu *emu, reg rd, uint64_t val) {
+  uint64_t temp = emu->regs[rd];
+  if (rd != 0)
+    emu->regs[rd] = val;
   return temp;
 }
 
-f64_t write_freg(Emu *emu, size_t reg, double val) {
-  double temp = emu->fregs[reg];
-  emu->regs[reg] = val;
+f64_t write_freg(Emu *emu, reg fd, double val) {
+  double temp = emu->fregs[fd];
+  emu->regs[fd] = val;
   return temp;
 }
 
-u64_t read_reg(Emu *emu, size_t reg) { return emu->regs[reg]; }
+u64_t read_reg(Emu *emu, reg ra) { return emu->regs[ra]; }
 
-f64_t read_freg(Emu *emu, size_t reg) { return emu->fregs[reg]; }
+f64_t read_freg(Emu *emu, reg ra) { return emu->fregs[ra]; }
 
 Emu *init_emulator() {
   static Emulator emu;
@@ -94,15 +94,22 @@ void next_cycle(Emu *emu) {
   /* Instruction Fetch */
 
   size_t prev_pc = emu->pc;
-  emu->pc += 4;
+  emu->pc += 4; // Rollback on jump
   u32_t instr = ((u32_t *)emu->mem)[prev_pc / 4];
 
   /* Instruction Decode */
 
-  // Also useful to know dependencies for the pipeline.
   Format format = get_format(instr);
   Args args = get_args(instr);
   bool fp = is_fp(instr);
 
+  /* Operand Fetch */
+
   Fetched fetched = op_fetch(emu, args, format, fp);
+
+  /* Execute */
+
+  /* Memory */
+
+  /* Write-Back */
 }
